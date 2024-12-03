@@ -4,62 +4,128 @@ import AlertMessage from "../../components/AlertMessage";
 
 const Signup = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
+  const Init_Error = {
+      name: {
+        isError: false,
+        message: "",
+      },
+      email: {
+        isError: false,
+        message: "",
+      },
+      password: {
+        isError: false,
+        message: "",
+      },
+      confirmPassword: {
+        isError: false,
+        message: "",
+      },
+    },
+    Init_formData = {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    };
+  const [formData, setFormData] = useState(Init_formData);
 
-  const [error, setError] = useState({
-    name: {
-      isError: false,
-      message: "",
-    },
-    email: {
-      isError: false,
-      message: "",
-    },
-    password: {
-      isError: false,
-      message: "",
-    },
-    confirmPassword: {
-      isError: false,
-      message: "",
-    },
-  });
+  const [error, setError] = useState(Init_Error);
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+    setError((prev) => ({
+      ...prev,
+      [e.target.name]: {
+        isError: false,
+        message: "",
+      },
+    }));
   };
 
-  const handleSubmit = (e) => {
-    debugger;
-    e.preventDefault();
+  /**
+   * Validates the form data and returns a Promise.
+   * Resolves if there are no validation errors, otherwise rejects with error details.
+   */
+  const validateForm = () => {
+    return new Promise((resolve, reject) => {
+      const errors = {};
 
-    const { name, email, password, confirmPassword } = formData;
-    if (!name) {
-      setError((...prev) => ({
-        ...prev,
-        name: {
+      // Check if name is provided
+      if (!formData.name) {
+        errors.name = { isError: true, message: "Name should not be empty." };
+      }
+
+      // Check if email is provided
+      if (!formData.email) {
+        errors.email = { isError: true, message: "Email should not be empty." };
+      }
+
+      // Check if password is provided
+      if (!formData.password) {
+        errors.password = {
           isError: true,
-          message: "Name Should not be empty.",
-        },
-      }));
-      return;
-    }
+          message: "Password should not be empty.",
+        };
+      }
 
-    if (password !== confirmPassword) {
-      return;
-    }
+      // Check if confirmPassword is provided
+      if (!formData.confirmPassword) {
+        errors.confirmPassword = {
+          isError: true,
+          message: "Confirm password should not be empty.",
+        };
+      }
 
-    // Simulate a successful sign-up and navigate to the login page
-    console.log("User signed up successfully", { email, password });
-    navigate("/");
+      // Check if password matches confirmPassword
+      if (
+        formData.password &&
+        formData.confirmPassword &&
+        formData.password !== formData.confirmPassword
+      ) {
+        errors.confirmPassword = {
+          isError: true,
+          message: "Confirm password does not match.",
+        };
+      }
+
+      // If there are errors, reject the Promise; otherwise, resolve
+      if (Object.keys(errors).length > 0) {
+        reject(errors);
+      } else {
+        resolve({});
+      }
+    });
+  };
+
+  /**
+   * Handles the form submission process.
+   * Validates form data, sets errors if validation fails, and navigates on success.
+   */
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault();
+      debugger;
+      // Wait for form validation to complete
+      const errors = await validateForm();
+      if (Object.keys(errors).length > 0) {
+        setError(errors);
+        return;
+      }
+
+      // Simulate a successful sign-up and navigate to the login page
+      console.log("User signed up successfully", {
+        email: formData.email,
+        password: formData.password,
+      });
+      navigate("/login");
+    } catch (errors) {
+      // Set validation errors
+      console.log("Error in handleSubmit", errors);
+    }
   };
 
   const handleLoginPageClick = () => {
@@ -71,7 +137,7 @@ const Signup = () => {
       <div className="card p-4 shadow" style={{ width: "400px" }}>
         <h2 className="text-center mb-4">Sign Up</h2>
 
-        <form onSubmit={handleSubmit}>
+        <form>
           <div className="mb-3">
             <label htmlFor="name" className="form-label">
               Name
@@ -79,13 +145,13 @@ const Signup = () => {
             <input
               type="text"
               id="Name"
-              name="Name"
-              value={formData.Name}
+              name="name"
+              value={formData.name}
               onChange={handleChange}
               className="form-control"
               placeholder="Enter your Name"
             />
-            {error.name.isError && (
+            {error?.name?.isError && (
               <AlertMessage type={"error"} message={error.name.message} />
             )}
           </div>
@@ -102,7 +168,7 @@ const Signup = () => {
               className="form-control"
               placeholder="Enter your email"
             />
-            {error.email.isError && (
+            {error?.email?.isError && (
               <AlertMessage type={"error"} message={error.email.message} />
             )}
           </div>
@@ -119,7 +185,7 @@ const Signup = () => {
               className="form-control"
               placeholder="Create a password"
             />
-            {error.password.isError && (
+            {error?.password?.isError && (
               <AlertMessage type={"error"} message={error.password.message} />
             )}
           </div>
@@ -136,14 +202,18 @@ const Signup = () => {
               className="form-control"
               placeholder="Confirm your password"
             />
-            {error.confirmPassword.isError && (
+            {error?.confirmPassword?.isError && (
               <AlertMessage
                 type={"error"}
                 message={error.confirmPassword.message}
               />
             )}
           </div>
-          <button type="submit" className="btn btn-primary w-100">
+          <button
+            type="submit"
+            className="btn btn-primary w-100"
+            onClick={handleSubmit}
+          >
             Sign Up
           </button>
         </form>
