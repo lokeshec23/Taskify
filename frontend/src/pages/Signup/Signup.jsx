@@ -32,6 +32,17 @@ const Signup = () => {
 
   const [error, setError] = useState(Init_Error);
 
+  const [showPassword, setShowPassword] = useState({
+    password: false,
+    confirmPassword: false,
+  }); // State for toggling password visibility
+
+  const togglePasswordVisibility = (name) => {
+    debugger;
+    // const { name } = event.target;
+    setShowPassword((prev) => ({ ...prev, [name]: !prev[name] }));
+  };
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -52,7 +63,8 @@ const Signup = () => {
    */
   const validateForm = () => {
     return new Promise((resolve, reject) => {
-      const errors = {};
+      const errors = {},
+        emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Email validation regex
 
       // Check if name is provided
       if (!formData.name) {
@@ -62,6 +74,8 @@ const Signup = () => {
       // Check if email is provided
       if (!formData.email) {
         errors.email = { isError: true, message: "Email should not be empty." };
+      } else if (!emailRegex.test(formData.email)) {
+        errors.email = { isError: true, message: "Email format is invalid." };
       }
 
       // Check if password is provided
@@ -121,15 +135,15 @@ const Signup = () => {
         email: formData.email,
         password: formData.password,
       });
-      navigate("/login");
+      navigate("/");
     } catch (errors) {
       // Set validation errors
-      console.log("Error in handleSubmit", errors);
+      setError(errors);
     }
   };
 
   const handleLoginPageClick = () => {
-    navigate("/login");
+    navigate("/");
   };
 
   return (
@@ -140,7 +154,7 @@ const Signup = () => {
         <form>
           <div className="mb-3">
             <label htmlFor="name" className="form-label">
-              Name
+              Name<span className="text-danger">*</span>
             </label>
             <input
               type="text"
@@ -157,7 +171,7 @@ const Signup = () => {
           </div>
           <div className="mb-3">
             <label htmlFor="email" className="form-label">
-              Email
+              Email <span className="text-danger">*</span>
             </label>
             <input
               type="email"
@@ -174,34 +188,59 @@ const Signup = () => {
           </div>
           <div className="mb-3">
             <label htmlFor="password" className="form-label">
-              Password
+              Password <span className="text-danger">*</span>
             </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              className="form-control"
-              placeholder="Create a password"
-            />
+            <div className="input-group">
+              <input
+                type={showPassword.password ? "text" : "password"}
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className="form-control"
+                placeholder="Enter your password"
+              />
+              <span
+                className="input-group-text"
+                name="password"
+                onClick={() => {
+                  togglePasswordVisibility("password");
+                }}
+                style={{ cursor: "pointer" }}
+              >
+                {showPassword.password ? "👁️" : "👁️‍🗨️"}
+              </span>
+            </div>
             {error?.password?.isError && (
               <AlertMessage type={"error"} message={error.password.message} />
             )}
           </div>
           <div className="mb-3">
             <label htmlFor="confirmPassword" className="form-label">
-              Confirm Password
+              Confirm Password <span className="text-danger">*</span>
             </label>
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              className="form-control"
-              placeholder="Confirm your password"
-            />
+
+            <div className="input-group">
+              <input
+                type={showPassword.confirmPassword ? "text" : "password"}
+                id="confirmPassword"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                className="form-control"
+                placeholder="Confirm your password"
+              />
+              <span
+                className="input-group-text"
+                name="confirmPassword"
+                onClick={() => {
+                  togglePasswordVisibility("confirmPassword");
+                }}
+                style={{ cursor: "pointer" }}
+              >
+                {showPassword.confirmPassword ? "👁️" : "👁️‍🗨️"}
+              </span>
+            </div>
             {error?.confirmPassword?.isError && (
               <AlertMessage
                 type={"error"}

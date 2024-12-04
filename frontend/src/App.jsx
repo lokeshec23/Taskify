@@ -10,8 +10,8 @@ const App = () => {
     <Router>
       <Routes>
         {/* Public Route */}
-        <Route path="/" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/" element={<Login />} />
         {/* Protected Route */}
         <Route
           path="/home"
