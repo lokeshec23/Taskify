@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AlertMessage from "../../components/AlertMessage";
-
+import { signup } from "../../services/Signup/SignupServices.js";
 const Signup = () => {
   const navigate = useNavigate();
   const Init_Error = {
@@ -122,20 +122,18 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      debugger;
       // Wait for form validation to complete
       const errors = await validateForm();
       if (Object.keys(errors).length > 0) {
         setError(errors);
         return;
       }
-
-      // Simulate a successful sign-up and navigate to the login page
-      console.log("User signed up successfully", {
-        email: formData.email,
-        password: formData.password,
-      });
-      navigate("/");
+      debugger;
+      // Call signup API
+      const response = await signup(formData);
+      console.log("respon", response);
+      alert("Signup Successful! You can now login.");
+      // navigate("/");
     } catch (errors) {
       // Set validation errors
       setError(errors);
