@@ -6,7 +6,7 @@ const { getUserDetails, getTaskList
 const { postTask } = require("../controllers/taskRoutes");
 const  authenticateToken  = require("../middleware/authMiddleware");
 const { body, validationResult } = require("express-validator");
-
+const { UpdateAPI, DeleteAPI } = require("../controllers/UDController");
 // User Registration Route
 router.post("/signup", signup);
 
@@ -26,6 +26,12 @@ router.post("/tasks", authenticateToken,
 
 
     // fetch task list
-router.get("/fetchTaskList", authenticateToken,  getTaskList);
+router.get("/fetchTaskList", authenticateToken, getTaskList);
+
+    // Route to update a task by ID
+router.put("/updateTask/:id", authenticateToken, UpdateAPI);
+
+    // fetch task list
+router.get("/deleteTask/:id", authenticateToken,  DeleteAPI);
 
 module.exports = router;

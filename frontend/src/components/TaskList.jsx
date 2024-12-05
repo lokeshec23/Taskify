@@ -3,8 +3,16 @@ import React from "react";
 import EmptyImg from "../assets/EmptyImg.svg";
 import { useAuth } from "../context/AuthContext";
 
-const TaskList = ({ TaskListFetch = [] }) => {
+const TaskList = ({ TaskListFetch = [], editProps = () => {} }) => {
   // const { TaskListFetch, setTaskListFetch } = useAuth();
+  const onClickEdit = (id) => {
+    const res = TaskListFetch.filter((a) => a._id === id)[0];
+    delete res.__V;
+    delete res.id;
+    delete res.createdAt;
+    editProps(res);
+  };
+
   const getListed = () => {
     return TaskListFetch?.length > 0 ? (
       <table className="table table-bordered">
@@ -17,13 +25,18 @@ const TaskList = ({ TaskListFetch = [] }) => {
           </tr>
         </thead>
         <tbody>
-          {TaskListFetch?.map((task) => (
-            <tr key={task.id}>
+          {TaskListFetch?.map((task, index) => (
+            <tr key={index}>
               <td>{task.taskName}</td>
               <td>{task.dueDate?.split("T")[0]}</td>
               <td>{task.description}</td>
               <td>
-                <button className="btn btn-warning btn-sm me-2">Edit</button>
+                <button
+                  className="btn btn-warning btn-sm me-2"
+                  onClick={() => onClickEdit(task._id)}
+                >
+                  Edit
+                </button>
                 <button className="btn btn-danger btn-sm">Delete</button>
               </td>
             </tr>

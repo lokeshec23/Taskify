@@ -11,7 +11,7 @@ export const postTask = async (taskData) => {
             if (!TOKEN) {
               throw new Error("No token found. Please log in.");
             }
-    debugger
+   
             const response = await axios.post(`${API_URL}/tasks`, taskData, {
                 headers: {
                   Authorization:  `Bearer ${TOKEN}`, // Send token in headers

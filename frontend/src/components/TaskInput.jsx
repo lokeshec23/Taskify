@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AlertMessage from "../components/AlertMessage";
 import "../styles/TaskInput.css"; // Import custom styling
 import { postTask } from "../services/Home/postTask";
 import { useAuth } from "../context/AuthContext";
-
-const TaskInput = ({ reloadList }) => {
+import { updateTask } from "../services/Home/updateService";
+const TaskInput = ({ reloadList, editData = {}, setEditData = () => {} }) => {
   const { setShowMessage } = useAuth();
   const Initi_Task = { name: "", description: "", dueDate: "" };
   const Initi_Error = {
@@ -19,11 +19,23 @@ const TaskInput = ({ reloadList }) => {
   };
   const [task, setTask] = useState(Initi_Task);
   const [error, setError] = useState(Initi_Error);
+  const [btnChange, setButtonChange] = useState("Add");
+  useEffect(() => {
+    debugger;
+    if (Object.keys(editData).length !== 0) {
+      let obj = {
+        name: editData.taskName,
+        dueDate: editData.dueDate?.split("T")[0],
+        description: editData.description,
+      };
+      setTask(obj);
+      setButtonChange("Update");
+    }
+  }, [editData]);
 
   const handleTaskSubmit = async () => {
     try {
       console.log("Task", task);
-      debugger;
       if (!task.name) {
         setError((prev) => ({
           ...prev,
@@ -48,24 +60,54 @@ const TaskInput = ({ reloadList }) => {
         dueDate: task.dueDate,
         description: task.description,
       };
-      let result = await postTask(obj);
-      if (result?.id) {
-        reloadList();
-        setShowMessage((prev) => ({
-          ...prev,
-          isShow: true,
-          type: "success",
-          message: "Task saved!",
-        }));
-        setTask(Initi_Task);
-        setError(Initi_Error);
+      if (btnChange === "Add") {
+        // save new task to db
+        let result = await postTask(obj);
+        if (result?.id) {
+          reloadList();
+          setShowMessage((prev) => ({
+            ...prev,
+            isShow: true,
+            type: "success",
+            message: "Task saved!",
+          }));
+          setTask(Initi_Task);
+          setError(Initi_Error);
+        } else {
+          setShowMessage((prev) => ({
+            ...prev,
+            isShow: true,
+            type: "danger",
+            message: "Something went wrong!",
+          }));
+        }
       } else {
-        setShowMessage((prev) => ({
-          ...prev,
-          isShow: true,
-          type: "danger",
-          message: "Something went wrong!",
-        }));
+        const taskData = {
+          taskName: task.name,
+          description: task.description,
+          dueDate: task.dueDate,
+        };
+        debugger;
+        try {
+          const updatedTask = await updateTask(editData["_id"], taskData);
+          console.log("Updated Task:", updatedTask);
+          if (updatedTask?.type === "ok") {
+            reloadList();
+            setShowMessage((prev) => ({
+              ...prev,
+              isShow: true,
+              type: "success",
+              message: updatedTask?.message || "Task updated!",
+            }));
+            setTask(Initi_Task);
+            setError(Initi_Error);
+            setButtonChange("Add");
+            setEditData({});
+          }
+          // Optionally update state to reflect the changes
+        } catch (error) {
+          alert("Failed to update task.");
+        }
       }
     } catch (ex) {
       console.log("Error in submit", ex);
@@ -75,6 +117,9 @@ const TaskInput = ({ reloadList }) => {
   const handleReset = () => {
     try {
       setTask(Initi_Task);
+      setError(Initi_Error);
+      setEditData({});
+      setButtonChange("Add");
     } catch (ex) {
       console.log("error in reset", ex);
     }
@@ -111,7 +156,7 @@ const TaskInput = ({ reloadList }) => {
                 className="form-control"
                 placeholder="Enter task name"
                 name="name"
-                value={task.name}
+                value={task.name || ""}
                 onChange={handleChange}
               />
               {error?.name?.isError && (
@@ -131,7 +176,7 @@ const TaskInput = ({ reloadList }) => {
                 id="dueDate"
                 className="form-control"
                 name="dueDate"
-                value={task.dueDate}
+                value={task.dueDate || ""}
                 onChange={handleChange}
               />
               {error?.dueDate?.isError && (
@@ -163,7 +208,7 @@ const TaskInput = ({ reloadList }) => {
                   className="form-control"
                   placeholder="Enter task description"
                   name="description"
-                  value={task.description}
+                  value={task.description || ""}
                   onChange={handleChange}
                 />
 
@@ -179,7 +224,9 @@ const TaskInput = ({ reloadList }) => {
                     className="btn btn-primary mb-2 taskInput-add-btn"
                     onClick={handleTaskSubmit}
                   >
-                    Add
+                    {/* {Object.keys(editData).length !== 0 ? "Update" : "Add"}
+                     */}
+                    {btnChange}
                   </button>
                   <button
                     type="reset"

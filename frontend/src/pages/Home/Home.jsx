@@ -20,6 +20,8 @@ const Home = () => {
     setTaskListFetch,
   } = useAuth();
   const [fetchList, setFetchList] = useState([]);
+  const [editData, setEditData] = useState({});
+
   useEffect(() => {
     getUserInfo();
     getTaskList();
@@ -37,9 +39,9 @@ const Home = () => {
   };
   return (
     <div style={{ width: "100%", height: "100dvh" }}>
-      <Header name={userDetails.name} />
-      <TaskInput reloadList={getTaskList} />
-      <TaskList TaskListFetch={fetchList} />
+      <Header name={userDetails.name} setEditData={setEditData} />
+      <TaskInput reloadList={getTaskList} editData={editData} />
+      <TaskList TaskListFetch={fetchList} editProps={setEditData} />
     </div>
   );
 };
