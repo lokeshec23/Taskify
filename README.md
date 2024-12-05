@@ -41,6 +41,7 @@ Make sure you have the following installed:
 ```bash
 git clone <your-github-repo-url>
 cd taskify
+```
 Backend Setup
 Navigate to the backend folder:
 bash
