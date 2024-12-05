@@ -12,6 +12,7 @@ app.use(cors());
 app.use(
   cors({
     origin: "*", // frontend URL
+    credentials: true
   })
 );
 
