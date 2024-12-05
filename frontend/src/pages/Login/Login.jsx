@@ -122,9 +122,8 @@ const Login = () => {
         setError(errors);
         return;
       }
-
       const response = await loginAPI(formData.email, formData.password);
-     
+
       if (response.type === "error") {
         setShowMessage((prev) => ({
           ...prev,
@@ -136,7 +135,7 @@ const Login = () => {
       }
       localStorage.setItem("authToken", response.token);
       localStorage.setItem("isLogin", true);
-      login(response); // Set user as authenticated
+      login(); // Set user as authenticated
       // setShowMessage((prev) => ({
       //   ...prev,
       //   isShow: true,

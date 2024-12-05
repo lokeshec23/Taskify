@@ -9,9 +9,10 @@ exports.getUserDetails = async (req, res) => {
         return res.status(401).json({ message: "Token not provided" });
       }
   
+      console.log("token from getUSer", token)
       // Verify the token
       const decoded = jwt.verify(token, jwtSecret);
-      console.log(decoded)
+      console.log({decoded, token, jwtSecret})
       // Fetch user details
       const user = await User.findById(decoded.id, "name"); // Only fetch the 'name' field
       if (!user) {

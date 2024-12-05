@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 const AuthContext = createContext();
 
@@ -7,8 +7,11 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const checkLogin = localStorage.getItem("isLogin");
-  const TOKEN = localStorage.getItem("authToken");
+  let TOKEN = localStorage.getItem("authToken");
   const isLogin = Boolean(checkLogin) && TOKEN;
+
+  // useEffect(() => {}, []);
+
   const [isAuthenticated, setIsAuthenticated] = useState(isLogin);
   const [user, setUser] = useState(null); // To store user details
   const [theme, setTheme] = useState("light"); // Light or dark theme
@@ -22,13 +25,18 @@ export const AuthProvider = ({ children }) => {
   const [userDetails, setUserDetails] = useState({});
 
   const login = (userDetails) => {
-    setIsAuthenticated(isLogin);
+    const _checkLogin = localStorage.getItem("isLogin");
+    const _TOKEN = localStorage.getItem("authToken");
+    const _isLogin = Boolean(_checkLogin) && _TOKEN;
+    setIsAuthenticated(_isLogin);
     setUser(userDetails);
   };
 
   const logout = () => {
     setIsAuthenticated(false);
     setUser(null);
+    setUserDetails({});
+    localStorage.clear();
   };
 
   const toggleTheme = () => {

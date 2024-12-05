@@ -1,10 +1,11 @@
 import axios from "axios";
-import { useAuth } from "../../context/AuthContext";
+// import { useAuth } from "../../context/AuthContext";
 const API_URL = import.meta.env.VITE_API_URL;
 
-
 export const fetchUserDetails = async (email, password) => {
-  const  {TOKEN} = useAuth()
+  const TOKEN = localStorage.getItem("authToken") || "";
+  // const  {TOKEN} = useAuth()
+  console.log("Token client", TOKEN)
     try {
         // const response = await axios.post(`${API_URL}/fetchUserDetails `, { email, password });
         // return response.data;

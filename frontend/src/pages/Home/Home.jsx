@@ -1,23 +1,23 @@
 import React, { useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { fetchUserDetails } from "../../services/Home/getUserDetails";
+import Header from "../../components/Header";
 
 const Home = () => {
   const { user, theme, toggleTheme, logout, userDetails, setUserDetails } =
     useAuth();
 
   useEffect(() => {
-    const response = fetchUserDetails();
-    setUserDetails(response);
+    const getUserInfo = async () => {
+      const response = await fetchUserDetails();
+      setUserDetails((prev) => ({ ...prev, name: response }));
+    };
+    getUserInfo();
   }, []);
 
   return (
-    <div
-      className={`flex flex-col items-center justify-center min-h-screen ${
-        theme === "light" ? "bg-white text-black" : "bg-gray-900 text-white"
-      }`}
-    >
-      <h1 className="text-3xl font-bold">Welcome, {userDetails.name}!</h1>
+    <div style={{ width: "100%", height: "100dvh" }}>
+      <Header name={userDetails.name} />
     </div>
   );
 };
