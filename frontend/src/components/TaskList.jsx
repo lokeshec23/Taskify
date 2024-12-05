@@ -2,15 +2,41 @@ import "../styles/TaskList.css";
 import React from "react";
 import EmptyImg from "../assets/EmptyImg.svg";
 import { useAuth } from "../context/AuthContext";
-
-const TaskList = ({ TaskListFetch = [], editProps = () => {} }) => {
-  // const { TaskListFetch, setTaskListFetch } = useAuth();
+import { deleteTask } from "../services/Home/deleteService";
+const TaskList = ({ reloadList, TaskListFetch = [], editProps = () => {} }) => {
+  const { setShowMessage } = useAuth();
   const onClickEdit = (id) => {
     const res = TaskListFetch.filter((a) => a._id === id)[0];
     delete res.__V;
     delete res.id;
     delete res.createdAt;
     editProps(res);
+  };
+
+  const handleDeleteTask = async (taskId) => {
+    try {
+      const result = await deleteTask(taskId);
+      console.log(result.message); // Display success message
+      if (result?.type === "ok") {
+        reloadList();
+        setShowMessage((prev) => ({
+          ...prev,
+          isShow: true,
+          type: "success",
+          message: result.message || "Task deleted!",
+        }));
+      } else {
+        setShowMessage((prev) => ({
+          ...prev,
+          isShow: true,
+          type: "danger",
+          message: "Something went wrong!",
+        }));
+      }
+      // Optionally remove the task from the UI
+    } catch (error) {
+      console.log("Failed to delete task.", error);
+    }
   };
 
   const getListed = () => {
@@ -37,7 +63,12 @@ const TaskList = ({ TaskListFetch = [], editProps = () => {} }) => {
                 >
                   Edit
                 </button>
-                <button className="btn btn-danger btn-sm">Delete</button>
+                <button
+                  className="btn btn-danger btn-sm"
+                  onClick={() => handleDeleteTask(task._id)}
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           ))}

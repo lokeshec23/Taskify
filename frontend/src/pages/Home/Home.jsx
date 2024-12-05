@@ -9,16 +9,7 @@ import TaskInput from "../../components/TaskInput";
 import TaskList from "../../components/TaskList";
 
 const Home = () => {
-  const {
-    user,
-    theme,
-    toggleTheme,
-    logout,
-    userDetails,
-    setUserDetails,
-    TaskListFetch,
-    setTaskListFetch,
-  } = useAuth();
+  const { userDetails, setUserDetails } = useAuth();
   const [fetchList, setFetchList] = useState([]);
   const [editData, setEditData] = useState({});
 
@@ -33,7 +24,6 @@ const Home = () => {
   };
 
   const getTaskList = async () => {
-    debugger;
     const response = await fetchTaskList();
     setFetchList(response);
   };
@@ -41,7 +31,11 @@ const Home = () => {
     <div style={{ width: "100%", height: "100dvh" }}>
       <Header name={userDetails.name} setEditData={setEditData} />
       <TaskInput reloadList={getTaskList} editData={editData} />
-      <TaskList TaskListFetch={fetchList} editProps={setEditData} />
+      <TaskList
+        reloadList={getTaskList}
+        TaskListFetch={fetchList}
+        editProps={setEditData}
+      />
     </div>
   );
 };

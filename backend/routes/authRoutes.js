@@ -32,6 +32,6 @@ router.get("/fetchTaskList", authenticateToken, getTaskList);
 router.put("/updateTask/:id", authenticateToken, UpdateAPI);
 
     // fetch task list
-router.get("/deleteTask/:id", authenticateToken,  DeleteAPI);
+router.delete("/deleteTask/:id", authenticateToken,  DeleteAPI);
 
 module.exports = router;

@@ -21,7 +21,7 @@ const TaskInput = ({ reloadList, editData = {}, setEditData = () => {} }) => {
   const [error, setError] = useState(Initi_Error);
   const [btnChange, setButtonChange] = useState("Add");
   useEffect(() => {
-    debugger;
+   
     if (Object.keys(editData).length !== 0) {
       let obj = {
         name: editData.taskName,
@@ -87,7 +87,7 @@ const TaskInput = ({ reloadList, editData = {}, setEditData = () => {} }) => {
           description: task.description,
           dueDate: task.dueDate,
         };
-        debugger;
+        
         try {
           const updatedTask = await updateTask(editData["_id"], taskData);
           console.log("Updated Task:", updatedTask);
@@ -106,7 +106,7 @@ const TaskInput = ({ reloadList, editData = {}, setEditData = () => {} }) => {
           }
           // Optionally update state to reflect the changes
         } catch (error) {
-          alert("Failed to update task.");
+          console.log("Failed to update task.", error);
         }
       }
     } catch (ex) {
