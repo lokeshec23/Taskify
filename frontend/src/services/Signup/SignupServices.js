@@ -5,7 +5,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 // **Signup API Call**
 export const signup = async (formData) => {
-  debugger;
+ 
   try {
     const { name, email, password } = formData;
     const response = await axios.post(`${API_URL}/signup`, {
@@ -15,7 +15,9 @@ export const signup = async (formData) => {
     });
     return response.data;
   } catch (error) {
-    let ex = error.response ? error.response.data : "Server error" + error;
+    const ex = error.response ? error.response.data : "Server error" + error;
     console.log(ex);
+    const res = {type:'error', message: error.response ? error.response.data.message: ""}
+    return error.response ? res : null
   }
 };

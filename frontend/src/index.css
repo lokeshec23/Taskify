@@ -1,14 +1,29 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  /* line-height: 1.5;
-  font-weight: 400;
+ font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --primary-color: #6200EA;
+  --secondary-color: #03DAC5;
+  --background-color: #FFFFFF;
+  --surface-color: #F5F5F5;
+  --text-color-primary: #212121;
+  --text-color-secondary: #757575;
+  --accent-color: #FF5722;
+}
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+[data-theme='dark'] {
+  --primary-color: #BB86FC;
+  --secondary-color: #03DAC6;
+  --background-color: #121212;
+  --surface-color: #1E1E1E;
+  --text-color-primary: #E1E1E1;
+  --text-color-secondary: #B3B3B3;
+  --accent-color: #FF6D00;
+}
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale; */
+input:focus, 
+textarea:focus, 
+select:focus, 
+button:focus {
+  outline: none !important; /* Overrides any outline styles */
+  box-shadow: none !important; /* Ensures shadow is removed */
+  border: 1px solid #6200EA !important; /* Optional: Keeps the border consistent */
 }

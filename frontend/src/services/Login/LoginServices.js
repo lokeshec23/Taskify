@@ -1,14 +1,17 @@
 import axios from "axios";
 
-const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 
 
 // **Login API Call**
-export const login = async (email, password) => {
+export const loginAPI = async (email, password) => {
     try {
         const response = await axios.post(`${API_URL}/login`, { email, password });
         return response.data;
     } catch (error) {
-        throw error.response ? error.response.data : "Server error";
+        const ex = error.response ? error.response.data : "Server error" + error;
+        console.log(ex);
+        const res = {type:'error', message: error.response ? error.response.data.message: ""}
+        return error.response ? res : null
     }
 };

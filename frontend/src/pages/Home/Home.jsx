@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
+import { fetchUserDetails } from "../../services/Home/getUserDetails";
 
 const Home = () => {
-  const { user, theme, toggleTheme, logout } = useAuth();
+  const { user, theme, toggleTheme, logout, userDetails, setUserDetails } =
+    useAuth();
+
+  useEffect(() => {
+    const response = fetchUserDetails();
+    setUserDetails(response);
+  }, []);
 
   return (
     <div
@@ -10,23 +17,7 @@ const Home = () => {
         theme === "light" ? "bg-white text-black" : "bg-gray-900 text-white"
       }`}
     >
-      <h1 className="text-3xl font-bold">Welcome, {user.name}!</h1>
-      <p className="mt-2 text-lg">Email: {user.email}</p>
-
-      <div className="mt-4 space-x-4">
-        <button
-          className="px-4 py-2 font-bold text-white bg-green-500 rounded hover:bg-green-600"
-          onClick={toggleTheme}
-        >
-          Toggle Theme
-        </button>
-        <button
-          className="px-4 py-2 font-bold text-white bg-red-500 rounded hover:bg-red-600"
-          onClick={logout}
-        >
-          Log Out
-        </button>
-      </div>
+      <h1 className="text-3xl font-bold">Welcome, {userDetails.name}!</h1>
     </div>
   );
 };

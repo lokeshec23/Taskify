@@ -30,10 +30,12 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AlertMessage from "../../components/AlertMessage";
 import { useAuth } from "../../context/AuthContext";
+import "../../styles/Login.css";
+import { loginAPI } from "../../services/Login/LoginServices";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, showMessage, setShowMessage } = useAuth();
 
   const Init_Error = {
     email: {
@@ -121,13 +123,26 @@ const Login = () => {
         return;
       }
 
-      // Simulate a successful login
-      console.log("User logged in successfully", {
-        email: formData.email,
-        password: formData.password,
-      });
-      const userDetails = { pass: formData.password, email: formData.email }; // Simulate user data
-      login(userDetails); // Set user as authenticated
+      const response = await loginAPI(formData.email, formData.password);
+     
+      if (response.type === "error") {
+        setShowMessage((prev) => ({
+          ...prev,
+          isShow: true,
+          type: "danger",
+          message: response.message,
+        }));
+        return;
+      }
+      localStorage.setItem("authToken", response.token);
+      localStorage.setItem("isLogin", true);
+      login(response); // Set user as authenticated
+      // setShowMessage((prev) => ({
+      //   ...prev,
+      //   isShow: true,
+      //   type: "success",
+      //   message: response.message,
+      // }));
       navigate("/home");
     } catch (errors) {
       // Set validation errors
@@ -142,7 +157,7 @@ const Login = () => {
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
       <div className="card p-4 shadow" style={{ width: "400px" }}>
-        <h2 className="text-center mb-4">Log In</h2>
+        <h2 className="text-center mb-4 login-heading">Log In</h2>
 
         <form>
           <div className="mb-3">
@@ -188,18 +203,14 @@ const Login = () => {
               <AlertMessage type={"error"} message={error.password.message} />
             )}
           </div>
-          <button
-            type="submit"
-            className="btn btn-primary w-100"
-            onClick={handleSubmit}
-          >
+          <button type="submit" className="login-button" onClick={handleSubmit}>
             Log In
           </button>
         </form>
         <p className="text-center mt-3">
           Don't have an account?{" "}
           <p onClick={handleSignupPageClick} className="text-decoration-none">
-            Sign up here
+            <span className="login-signup"> Sign up here </span>
           </p>
         </p>
       </div>

@@ -1,0 +1,20 @@
+.login-button {
+    padding: 10px;
+    color: #fff;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    width: 100%;
+    background-color: var(--primary-color);
+    margin-top: 10px;
+  }
+  
+
+  .login-heading{
+    color: var(--primary-color);
+  }
+
+  .login-signup{
+    color: var(--primary-color);
+    cursor: pointer;
+  }
