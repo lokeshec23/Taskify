@@ -4,7 +4,7 @@ const { jwtSecret } = require("../config/config");
 
 const authenticateToken = (req, res, next) => {
   const token = req.header("Authorization")?.split(" ")[1]; // Bearer <token>
-
+  console.log("token form auth", token)
   if (!token) {
     return res
       .status(401)

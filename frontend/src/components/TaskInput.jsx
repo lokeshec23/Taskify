@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import AlertMessage from "../components/AlertMessage";
 import "../styles/TaskInput.css"; // Import custom styling
+import { postTask } from "../services/Home/postTask";
+import { useAuth } from "../context/AuthContext";
 
-const TaskInput = () => {
+const TaskInput = ({ reloadList }) => {
+  const { setShowMessage } = useAuth();
   const Initi_Task = { name: "", description: "", dueDate: "" };
   const Initi_Error = {
     name: {
@@ -17,7 +20,7 @@ const TaskInput = () => {
   const [task, setTask] = useState(Initi_Task);
   const [error, setError] = useState(Initi_Error);
 
-  const handleTaskSubmit = () => {
+  const handleTaskSubmit = async () => {
     try {
       console.log("Task", task);
       debugger;
@@ -39,6 +42,30 @@ const TaskInput = () => {
           },
         }));
         return;
+      }
+      let obj = {
+        taskName: task.name,
+        dueDate: task.dueDate,
+        description: task.description,
+      };
+      let result = await postTask(obj);
+      if (result?.id) {
+        reloadList();
+        setShowMessage((prev) => ({
+          ...prev,
+          isShow: true,
+          type: "success",
+          message: "Task saved!",
+        }));
+        setTask(Initi_Task);
+        setError(Initi_Error);
+      } else {
+        setShowMessage((prev) => ({
+          ...prev,
+          isShow: true,
+          type: "danger",
+          message: "Something went wrong!",
+        }));
       }
     } catch (ex) {
       console.log("Error in submit", ex);

@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
     position: "bottom-right",
   });
   const [userDetails, setUserDetails] = useState({});
-
+  const [TaskListFetch, setTaskListFetch] = useState([]);
   const login = (userDetails) => {
     const _checkLogin = localStorage.getItem("isLogin");
     const _TOKEN = localStorage.getItem("authToken");

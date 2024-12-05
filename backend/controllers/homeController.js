@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const { jwtSecret } = require("../config/config");
+const { validationResult } = require("express-validator");
+const Task = require("../models/TaskSchema"); // Task model 
 
 exports.getUserDetails = async (req, res) => {
     try {
@@ -23,4 +25,14 @@ exports.getUserDetails = async (req, res) => {
     } catch (error) {
       res.status(500).json({ message: "Server error", error });
     }
-  };
+};
+  
+
+exports.getTaskList = async (req, res) => {
+  try {
+    const tasks = await Task.find({ id: req.user.id }); // Fetch tasks based on userID from token
+    res.status(200).json(tasks);
+  } catch (err) {
+    res.status(500).json({ message: "Server error." });
+  }
+};
