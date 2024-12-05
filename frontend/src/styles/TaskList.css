@@ -1,0 +1,47 @@
+.task-list-container {
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .task-list-scroll {
+    max-height: 40dvh;
+    overflow-y: auto;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 10px;
+  }
+  
+  .table {
+    margin: 0;
+  }
+  
+  .table-bordered {
+    border: 1px solid #dee2e6;
+  }
+  
+  .table-dark th {
+    background-color: #343a40;
+    color: #ffffff;
+  }
+  
+  .btn-warning {
+    /* background-color: #ffc107;
+    border-color: #ffc107; */
+    /* color: #212529; */
+    color: #fff;
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+  }
+  
+  .btn-danger {
+    background-color: #343a40;
+    border-color: #343a40;
+  }
+  
+
+  

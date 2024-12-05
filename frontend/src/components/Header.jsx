@@ -3,6 +3,8 @@ import "../styles/Header.css";
 import { useAuth } from "../context/AuthContext";
 const Header = ({ name = "User" }) => {
   const { logout } = useAuth();
+  // Capitalize the first letter of the name
+  const formattedName = name.charAt(0).toUpperCase() + name.slice(1);
   return (
     <div className="header-container bg-light shadow">
       {/* Left div */}
@@ -18,7 +20,7 @@ const Header = ({ name = "User" }) => {
       {/* Right Div */}
       <div className="header-right-div">
         <h4>
-          Hi, <span className="header-name">{name}</span>
+          Hi, <span className="header-name">{formattedName}</span>
         </h4>
         <img
           src={PowerOff}
