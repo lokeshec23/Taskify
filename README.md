@@ -45,54 +45,59 @@ cd taskify
 
 ### Backend Setup
 ## Navigate to the backend folder:
-bash
+```bash
 Copy code
 cd backend
 Install dependencies:
 bash
 Copy code
 npm install
-Create a .env file in the backend folder and add the following:
+```
+## Create a .env file in the backend folder and add the following:
 env
 Copy code
 PORT=5000
 MONGO_URI=<your-mongo-connection-string>
 JWT_SECRET=<your-jwt-secret>
 Start the backend server:
-bash
 Copy code
+```bash
 npm run start
-Frontend Setup
-Navigate to the frontend folder:
-bash
+```
+### Frontend Setup
+## Navigate to the frontend folder:
+```bash
 Copy code
 cd frontend
+```
 Install dependencies:
-bash
+```bash
 Copy code
 npm install
 Create a .env file in the frontend folder and add the following:
 env
 Copy code
 VITE_API_URL=http://localhost:5000/api
+```
 Start the frontend server:
-bash
+```bash
 Copy code
 npm run dev
-Usage
-Register: Sign up with your email and password.
-Login: Authenticate yourself with the registered credentials.
-Task Inputs:
-Add new tasks by filling in the task name, description, and due date.
-View all tasks in a scrollable table with options to edit or delete.
-Task Table:
-Tasks are displayed in a tabular format for easy tracking and management.
-API Endpoints
+```
+### Usage
+- **Register: Sign up with your email and password.
+- **Login: Authenticate yourself with the registered credentials.
+- **Task Inputs:
+- **Add new tasks by filling in the task name, description, and due date.
+- **View all tasks in a scrollable table with options to edit or delete.
+- **Task Table:
+- **Tasks are displayed in a tabular format for easy tracking and management.
+###API Endpoints
 Here are some of the key backend routes:
 
-POST /api/register: Register a new user.
-POST /api/login: Log in and receive a JWT.
-POST /api/tasks: Create a new task (requires authentication).
-GET /api/tasks: Retrieve all tasks for the authenticated user.
-PUT /api/tasks/:id: Update a specific task (requires authentication).
-DELETE /api/tasks/:id: Delete a specific task (requires authentication).
+- **POST /api/register: Register a new user.
+- **POST /api/login: Log in and receive a JWT.
+- **POST /api/tasks: Create a new task (requires authentication).
+- **GET /api/tasks: Retrieve all tasks for the authenticated user.
+- **PUT /api/updateTask/:id: Update a specific task (requires authentication).
+- **DELETE /api/deleteTask/:id: Delete a specific task (requires authentication).
