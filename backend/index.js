@@ -12,7 +12,7 @@ app.use(cors());
 app.use(
   cors({
     origin: "*", // frontend URL
-    credentials: true
+    credentials: true,
   })
 );
 
@@ -33,5 +33,5 @@ app.use("/api", authRoutes);
 
 // Start Server/api/signup
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on ${PORT}`);
 });

@@ -1,4 +1,4 @@
-import PowerOff from "../assets/PowerOff.svg";
+import PowerOff from "../assets/powerOff.svg";
 import "../styles/Header.css";
 import { useAuth } from "../context/AuthContext";
 const Header = ({ name = "User" }) => {
