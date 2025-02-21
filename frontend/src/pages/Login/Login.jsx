@@ -122,6 +122,7 @@ const Login = () => {
         setError(errors);
         return;
       }
+      debugger;
       const response = await loginAPI(formData.email, formData.password);
 
       if (response.type === "error") {

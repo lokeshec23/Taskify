@@ -30,6 +30,7 @@ exports.signup = async (req, res) => {
 // **API for User Login**
 exports.login = async (req, res) => {
   try {
+    debugger;
     const { email, password } = req.body;
 
     // Check if the user exists
@@ -48,6 +49,7 @@ exports.login = async (req, res) => {
     const token = jwt.sign({ id: user._id }, jwtSecret, { expiresIn: "1h" });
     res.status(200).json({ message: "Login successful", token });
   } catch (error) {
+    console.log("Error in login attempt", error);
     res.status(500).json({ message: "Server error", error });
   }
 };
